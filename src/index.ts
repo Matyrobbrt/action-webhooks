@@ -1,6 +1,6 @@
 import {GitHub} from "@actions/github/lib/utils";
 
-import core, {getInput} from '@actions/core';
+import {getInput, setFailed} from '@actions/core';
 import {context, getOctokit} from '@actions/github';
 import axios from "axios";
 
@@ -83,11 +83,10 @@ export async function run(): Promise<any> {
                 'Content-Type': 'application/json'
             }
         })
-
-        console.log(lastCommit!!.data!!.author!!.login)
     } catch (error) {
+        console.log(`Failed: ${error}`)
         // @ts-ignore
-        core.setFailed(error.message);
+        setFailed(error.message);
     }
 }
 
