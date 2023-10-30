@@ -54,7 +54,8 @@ export async function run(): Promise<any> {
         }
 
         if (getInput('fields')) {
-            fields.push(JSON.parse(getInput('fields')))
+            const inputFields: any[] = JSON.parse(getInput('fields'));
+            inputFields.forEach(e => fields.push(e));
         }
 
         const json = {

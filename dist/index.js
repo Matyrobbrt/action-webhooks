@@ -33379,7 +33379,8 @@ async function run() {
             });
         }
         if ((0, core_1.getInput)('fields')) {
-            fields.push(JSON.parse((0, core_1.getInput)('fields')));
+            const inputFields = JSON.parse((0, core_1.getInput)('fields'));
+            inputFields.forEach(e => fields.push(e));
         }
         const json = {
             username: 'GitHub Actions',
