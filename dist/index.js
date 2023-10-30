@@ -33402,6 +33402,7 @@ async function run() {
                 }
             ]
         };
+        console.log(`Post body: ${JSON.stringify(json)}`);
         await axios_1.default.post((0, core_1.getInput)("webhook_url"), json, {
             headers: {
                 'Content-Type': 'application/json'
