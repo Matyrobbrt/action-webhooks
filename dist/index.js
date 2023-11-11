@@ -33372,7 +33372,8 @@ async function run() {
             "value": github_1.context.payload.ref.toString().replace("refs/heads/", ""),
             "inline": true
         });
-        if ((0, core_1.getInput)('include_commit_message') == '' || (0, core_1.getInput)('include_commit_message') == 'true') {
+        const includeCommitInfo = (0, core_1.getInput)('include_commit_message') == '' || (0, core_1.getInput)('include_commit_message') == 'true';
+        if (includeCommitInfo) {
             fields.push({
                 "name": "Commit message",
                 "value": `\`${lastCommit.data.commit.message}\``
@@ -33382,26 +33383,27 @@ async function run() {
             const inputFields = JSON.parse((0, core_1.getInput)('fields'));
             inputFields.forEach(e => fields.push(e));
         }
+        const embed = {
+            "title": "Build " + userFriendlyName[status],
+            "url": `https://github.com/${github_1.context.repo.owner}/${github_1.context.repo.repo}/actions/runs/${github_1.context.runId}`,
+            "color": colors[status],
+            "fields": fields,
+            "author": {
+                "name": github_1.context.repo.repo,
+                "url": `https://github.com/${github_1.context.repo.owner}/${github_1.context.repo.repo}`,
+                "icon_url": `https://github.com/${github_1.context.repo.owner}.png`
+            }
+        };
+        if (includeCommitInfo) {
+            embed['footer'] = {
+                "text": lastCommit.data.author.login,
+                "icon_url": lastCommit.data.author.avatar_url
+            };
+        }
         const json = {
             username: 'GitHub Actions',
             avatar_url: 'https://avatars.githubusercontent.com/in/15368?v=4',
-            "embeds": [
-                {
-                    "title": "Build " + userFriendlyName[status],
-                    "url": `https://github.com/${github_1.context.repo.owner}/${github_1.context.repo.repo}/actions/runs/${github_1.context.runId}`,
-                    "color": colors[status],
-                    "fields": fields,
-                    "author": {
-                        "name": github_1.context.repo.repo,
-                        "url": `https://github.com/${github_1.context.repo.owner}/${github_1.context.repo.repo}`,
-                        "icon_url": `https://github.com/${github_1.context.repo.owner}.png`
-                    },
-                    "footer": {
-                        "text": lastCommit.data.author.login,
-                        "icon_url": lastCommit.data.author.avatar_url
-                    }
-                }
-            ]
+            "embeds": [embed]
         };
         console.log(`Post body: ${JSON.stringify(json)}`);
         await axios_1.default.post((0, core_1.getInput)("webhook_url"), json, {

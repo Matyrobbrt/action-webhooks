@@ -46,7 +46,8 @@ export async function run(): Promise<any> {
             "value": context.payload.ref!!.toString().replace("refs/heads/", ""),
             "inline": true
         })
-        if (getInput('include_commit_message') == '' || getInput('include_commit_message') == 'true') {
+        const includeCommitInfo = getInput('include_commit_message') == '' || getInput('include_commit_message') == 'true'
+        if (includeCommitInfo) {
             fields.push({
                 "name": "Commit message",
                 "value": `\`${lastCommit.data.commit.message}\``
@@ -58,26 +59,30 @@ export async function run(): Promise<any> {
             inputFields.forEach(e => fields.push(e));
         }
 
+        const embed = {
+            "title": "Build " + userFriendlyName[status],
+            "url": `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+            "color": colors[status],
+            "fields": fields,
+            "author": {
+                "name": context.repo.repo,
+                "url": `https://github.com/${context.repo.owner}/${context.repo.repo}`,
+                "icon_url": `https://github.com/${context.repo.owner}.png`
+            }
+        }
+
+        if (includeCommitInfo) {
+            embed['footer'] = {
+                "text": lastCommit.data.author!!.login,
+                "icon_url": lastCommit.data.author!!.avatar_url
+            }
+        }
+
         const json = {
             username: 'GitHub Actions',
             avatar_url: 'https://avatars.githubusercontent.com/in/15368?v=4',
-            "embeds": [
-            {
-                "title": "Build " + userFriendlyName[status],
-                "url": `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
-                "color": colors[status],
-                "fields": fields,
-                "author": {
-                    "name": context.repo.repo,
-                    "url": `https://github.com/${context.repo.owner}/${context.repo.repo}`,
-                    "icon_url": `https://github.com/${context.repo.owner}.png`
-                },
-                "footer": {
-                    "text": lastCommit.data.author!!.login,
-                    "icon_url": lastCommit.data.author!!.avatar_url
-                }
-            }
-        ]}
+            "embeds": [embed]
+        }
 
         console.log(`Post body: ${JSON.stringify(json)}`)
 
