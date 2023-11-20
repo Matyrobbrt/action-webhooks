@@ -68,7 +68,8 @@ export async function run(): Promise<any> {
                 "name": context.repo.repo,
                 "url": `https://github.com/${context.repo.owner}/${context.repo.repo}`,
                 "icon_url": `https://github.com/${context.repo.owner}.png`
-            }
+            },
+            "timestamp": new Date().toISOString()
         }
 
         if (includeCommitInfo) {
