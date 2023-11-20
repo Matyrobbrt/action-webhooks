@@ -33392,7 +33392,8 @@ async function run() {
                 "name": github_1.context.repo.repo,
                 "url": `https://github.com/${github_1.context.repo.owner}/${github_1.context.repo.repo}`,
                 "icon_url": `https://github.com/${github_1.context.repo.owner}.png`
-            }
+            },
+            "timestamp": new Date().toISOString()
         };
         if (includeCommitInfo) {
             embed['footer'] = {
