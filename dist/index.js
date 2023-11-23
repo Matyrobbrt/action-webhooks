@@ -33376,7 +33376,7 @@ async function run() {
         if (includeCommitInfo) {
             fields.push({
                 "name": "Commit message",
-                "value": `\`${trim(lastCommit.data.commit.message, 1000)}\``
+                "value": trim(lastCommit.data.commit.message, 1000)
             });
         }
         if ((0, core_1.getInput)('fields')) {
