@@ -50,7 +50,7 @@ export async function run(): Promise<any> {
         if (includeCommitInfo) {
             fields.push({
                 "name": "Commit message",
-                "value": `\`${lastCommit.data.commit.message}\``
+                "value": `\`${trim(lastCommit.data.commit.message, 1000)}\``
             })
         }
 
@@ -97,6 +97,10 @@ export async function run(): Promise<any> {
         // @ts-ignore
         setFailed(error.message);
     }
+}
+
+function trim(str: string, maxLength: number): string {
+    return str.length > maxLength ? (str.substring(0, maxLength - 3) + "...") : str;
 }
 
 function getStatus(status: string): Status {

@@ -33376,7 +33376,7 @@ async function run() {
         if (includeCommitInfo) {
             fields.push({
                 "name": "Commit message",
-                "value": `\`${lastCommit.data.commit.message}\``
+                "value": `\`${trim(lastCommit.data.commit.message, 1000)}\``
             });
         }
         if ((0, core_1.getInput)('fields')) {
@@ -33420,6 +33420,9 @@ async function run() {
     }
 }
 exports.run = run;
+function trim(str, maxLength) {
+    return str.length > maxLength ? (str.substring(0, maxLength - 3) + "...") : str;
+}
 function getStatus(status) {
     switch (status.toLowerCase()) {
         case "success": return Status.success;
