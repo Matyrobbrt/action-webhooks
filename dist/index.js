@@ -33376,7 +33376,7 @@ async function run() {
         if (includeCommitInfo) {
             fields.push({
                 "name": "Commit message",
-                "value": trim(lastCommit.data.commit.message, 1000)
+                "value": trim(replaceReferences(lastCommit.data.commit.message, `${github_1.context.repo.owner}/${github_1.context.repo.repo}`), 1000)
             });
         }
         if ((0, core_1.getInput)('fields')) {
@@ -33422,6 +33422,11 @@ async function run() {
 exports.run = run;
 function trim(str, maxLength) {
     return str.length > maxLength ? (str.substring(0, maxLength - 3) + "...") : str;
+}
+function replaceReferences(str, repo) {
+    str = str.replace(/\(#(?<number>\d+)\)/m, `[(#$1)](https://github.com/${repo}/pull/$1)`);
+    str = str.replaceAll(/(?<type>(?:close|fix|resolve)(?:s|d|es|ed)?) #(?<number>\d+)/gmi, `$1 [#$2](https://github.com/${repo}/issues/$2)`);
+    return str;
 }
 function getStatus(status) {
     switch (status.toLowerCase()) {
