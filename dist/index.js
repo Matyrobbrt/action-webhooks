@@ -33376,7 +33376,7 @@ async function run() {
         if (includeCommitInfo) {
             fields.push({
                 "name": "Commit message",
-                "value": trim(replaceReferences(lastCommit.data.commit.message, `${github_1.context.repo.owner}/${github_1.context.repo.repo}`), 1000)
+                "value": trim(replaceReferences(lastCommit.data.commit.message, `${github_1.context.repo.owner}/${github_1.context.repo.repo}`), 1024)
             });
         }
         if ((0, core_1.getInput)('fields')) {

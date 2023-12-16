@@ -50,7 +50,7 @@ export async function run(): Promise<any> {
         if (includeCommitInfo) {
             fields.push({
                 "name": "Commit message",
-                "value": trim(replaceReferences(lastCommit.data.commit.message, `${context.repo.owner}/${context.repo.repo}`), 1000)
+                "value": trim(replaceReferences(lastCommit.data.commit.message, `${context.repo.owner}/${context.repo.repo}`), 1024)
             })
         }
 
